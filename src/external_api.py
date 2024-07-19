@@ -13,11 +13,6 @@ API_KEY_CURRENCY = os.getenv("API_KEY_CURRENCY")
 with open("../user_settings.json", encoding="utf-8")as f:  # открывает пользовательские настройки по акциям и валютам
     load_json_info = json.load(f)
 
-# time_now = datetime.datetime.now()
-# now_begin = time_now + datetime.timedelta(hours=-time_now.hour, minutes=-time_now.minute, seconds=-time_now.second)
-# # Получаем дату с начала текущего дня, для корректного получения стоимости акций
-# TIME_NOW_BEGIN = now_begin.strftime("%Y-%m-%d %H:%M:%S")
-
 
 def get_currency_rates(currencies: list) -> list[dict]:
     """
@@ -58,6 +53,3 @@ def get_stock_prices(stocks: list) -> list[dict]:
         prices.append({"stock": stock, "price": data["values"][0]["close"]})
 
     return prices
-
-
-# print(get_stock_prices(load_json_info["user_stocks"]))
