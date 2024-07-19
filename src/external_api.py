@@ -38,7 +38,9 @@ def get_currency_rates(currencies: list) -> list[dict]:
     try:
         for currency in currencies:
             response = requests.get(f"https://v6.exchangerate-api.com/v6/{API_KEY_CURRENCY}/latest/{currency}")
-            get_currnecy_logger.info("запрос статус = 200, отработал")
+
+            status_code = response.status_code
+            get_currnecy_logger.info(f"Статус код запроса {status_code}")
 
             try:
                 data = response.json()
