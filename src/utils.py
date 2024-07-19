@@ -1,12 +1,24 @@
 import datetime
 import pandas as pd
-# from views import opening_file
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s = - %(name)s - %(levelname)s - %(message)s',
+    filename="../log/utils.txt",
+    filemode="w")
+
+greeting_logger = logging.getLogger("greeting")
+info_cards_logger = logging.getLogger("get_info_cards")
+top_transactions_logger = logging.getLogger("top_transactions")
 
 
 def greeting() -> str:
     """ возвращает приветствие, в зависимости от времени"""
 
     time = datetime.datetime.now().hour
+    greeting_logger.info("функция отработала")
     if time in range(0, 7):
         return f"Доброй ночи"
     elif time in range(6, 13):
@@ -31,11 +43,7 @@ def top_transactions(operations_xlsx: pd.DataFrame) -> list[dict]:
     top_5_operation = operations_xlsx.sort_values(by="Сумма платежа").head()
     information = top_5_operation.loc[:, ["Дата платежа", "Сумма платежа", "Категория", "Описание"]]
 
+    top_transactions_logger.info("Функция отработала")
+
     return information.to_dict(orient="records")
 
-
-# if __name__ == "__main__":
-    # file = opening_file("../data/test.xlsx")
-    # x = opening_file("../data/operations.xlsx")
-    # print(get_info_cards(x))
-    # print(top_transactions(x))

@@ -1,7 +1,33 @@
 import pandas as pd
 import datetime
+from views import opening_file
+import logging
 
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s = - %(name)s - %(levelname)s - %(message)s',
+    filename="../log/reports.txt",
+    filemode="w")
+
+decorator_logger = logging.getLogger("spending_result")
+spending_by_category_logger = logging.getLogger("spending_by_category")
+
+
+def spending_result(path_file: str = "../data/spending_result.csv"):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            result.to_csv(path_file)
+
+            decorator_logger.info("декоратор отработал, записал результат функции в файл")
+
+            return result
+        return wrapper
+    return decorator
+
+
+@spending_result()
 def spending_by_category(transactions: pd.DataFrame,
                          category: str,
                          date: str = None) -> pd.DataFrame:
@@ -34,4 +60,5 @@ def spending_by_category(transactions: pd.DataFrame,
 
     sort_by_category = file_to_data[(file_to_data["Категория"] == category)]
 
+    spending_by_category_logger.info("функция отработала, вернула результат")
     return pd.DataFrame(sort_by_category)
