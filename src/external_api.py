@@ -1,3 +1,4 @@
+import datetime
 import requests
 from dotenv import load_dotenv
 import os
@@ -6,34 +7,57 @@ import json
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
-URL_CONVERT = os.getenv("URL_CONVERT")
+API_KEY_CURRENCY = os.getenv("API_KEY_CURRENCY")
 
-with open("../user_settings.json", encoding="utf-8")as f:
+
+with open("../user_settings.json", encoding="utf-8")as f:  # открывает пользовательские настройки по акциям и валютам
     load_json_info = json.load(f)
 
+# time_now = datetime.datetime.now()
+# now_begin = time_now + datetime.timedelta(hours=-time_now.hour, minutes=-time_now.minute, seconds=-time_now.second)
+# # Получаем дату с начала текущего дня, для корректного получения стоимости акций
+# TIME_NOW_BEGIN = now_begin.strftime("%Y-%m-%d %H:%M:%S")
 
-def get_exchange_rate():
-    url = URL_CONVERT
-    headers = {"apikey": API_KEY}
 
-    currency_rates = dict()
+def get_currency_rates(currencies: list) -> list[dict]:
+    """
+    Функция принимает список валют из пользовательских настроек
+    делает запрос и возвращает список со стоимостью каждой валюты по курсу на сегодня
+    """
+    rates = []
+    for currency in currencies:
+        response = requests.get(f"https://v6.exchangerate-api.com/v6/{API_KEY_CURRENCY}/latest/{currency}")
+        data = response.json()
+        rates.append({"currency": currency, "rate": data["conversion_rates"]["RUB"]})
 
-    for currency in load_json_info["user_currencies"]:
+    return rates
+
+
+def get_stock_prices(stocks: list) -> list[dict]:
+    """
+    Принимает пользовательские настройки (выбор акций) и возвращает стоимость акций
+    в $ на начало текущего дня
+    """
+    prices = []
+
+    for stock in stocks:
         params = {
-            "amount": 1,
-            "from": f"{currency}",
-            "to": "RUB",
+            "apikey": f"{API_KEY}",
+            "interval": "1day",
+            "format": "JSON",
+            "type": "stock",
+            "symbol": f"{stock}",
+            "outputsize": 1,
+            "timezone": "Europe/Moscow"
+
         }
 
-        responce = requests.get(url, headers=headers, params=params).json()
-        currency_rates[f"{currency}"] = responce["info"]["rate"]
+        response = requests.get("https://api.twelvedata.com/time_series", params=params)
 
-    return currency_rates
+        data = response.json()
+        prices.append({"stock": stock, "price": data["values"][0]["close"]})
 
-# def stock_prices():
-#     response = requests.get(
-#         "https://api.twelvedata.com/time_series?apikey=6e9063e4e2e54b9081d89aa412b9474a&interval=1min&format=JSON&timezone=Europe/Moscow&type=stock&symbol=AAPL, AMZN, MSFT, TSLA&country=Russian Federation")
-#
-#     return response.json()
-#
-# print(stock_prices())
+    return prices
+
+
+# print(get_stock_prices(load_json_info["user_stocks"]))

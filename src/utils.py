@@ -1,13 +1,9 @@
 import datetime
 import pandas as pd
-from collections import Counter
-
-
-PATH_FILE = "data/operations.xlsx"
-test_file = "data/test.xlsx"
 
 
 def opening_file(path_file: str) -> pd.DataFrame:
+    """Функция читает файл формата xlsx и возвращает DataFrame"""
     operations_xlsx = pd.read_excel(path_file)
     return operations_xlsx
 
@@ -27,6 +23,7 @@ def greeting() -> str:
 
 
 def get_info_cards(operations_xlsx: pd.DataFrame) -> list[dict]:
+    """принимает DataFrame и сортирует по параметрам"""
     group_card = operations_xlsx.groupby("Номер карты", as_index=False)
 
     total_sum_cashback = group_card.sum().loc[:, ["Номер карты", "Сумма платежа", "Кэшбэк"]]
@@ -35,7 +32,7 @@ def get_info_cards(operations_xlsx: pd.DataFrame) -> list[dict]:
 
 
 def top_transactions(operations_xlsx: pd.DataFrame) -> list[dict]:
-
+    """принимает DataFrame и выводит топ 5 транзакций"""
     top_5_operation = operations_xlsx.sort_values(by="Сумма платежа").head()
     information = top_5_operation.loc[:, ["Дата платежа", "Сумма платежа", "Категория", "Описание"]]
 
@@ -45,5 +42,5 @@ def top_transactions(operations_xlsx: pd.DataFrame) -> list[dict]:
 if __name__ == "__main__":
     file = opening_file("../data/test.xlsx")
     x = opening_file("../data/operations.xlsx")
-    print(get_info_cards(x))
-    print(top_transactions(x))
+    # print(get_info_cards(x))
+    # print(top_transactions(x))
