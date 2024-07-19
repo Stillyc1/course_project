@@ -1,14 +1,14 @@
-import pandas as pd
 import datetime
-from views import opening_file
 import logging
 
+import pandas as pd
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s = - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s = - %(name)s - %(levelname)s - %(message)s",
     filename="../log/reports.txt",
-    filemode="w")
+    filemode="w",
+)
 
 decorator_logger = logging.getLogger("spending_result")
 spending_by_category_logger = logging.getLogger("spending_by_category")
@@ -23,14 +23,14 @@ def spending_result(path_file: str = "../data/spending_result.csv"):
             decorator_logger.info("декоратор отработал, записал результат функции в файл")
 
             return result
+
         return wrapper
+
     return decorator
 
 
 @spending_result()
-def spending_by_category(transactions: pd.DataFrame,
-                         category: str,
-                         date: str = None) -> pd.DataFrame:
+def spending_by_category(transactions: pd.DataFrame, category: str, date: str = None) -> pd.DataFrame:
     """
     Функция принимает на вход:
     датафрейм с транзакциями,
@@ -54,8 +54,7 @@ def spending_by_category(transactions: pd.DataFrame,
     slice_time_first = date_three_month_ago.strftime("%d.%m.%Y")
 
     file_to_data = sort_transactions[
-        (sort_transactions["Дата платежа"] >= slice_time_first) &
-        (sort_transactions["Дата платежа"] <= date)
+        (sort_transactions["Дата платежа"] >= slice_time_first) & (sort_transactions["Дата платежа"] <= date)
     ]
 
     sort_by_category = file_to_data[(file_to_data["Категория"] == category)]

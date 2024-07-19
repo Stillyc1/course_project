@@ -1,13 +1,14 @@
 import datetime
-import pandas as pd
 import logging
 
+import pandas as pd
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s = - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s = - %(name)s - %(levelname)s - %(message)s",
     filename="../log/utils.txt",
-    filemode="w")
+    filemode="w",
+)
 
 greeting_logger = logging.getLogger("greeting")
 info_cards_logger = logging.getLogger("get_info_cards")
@@ -15,18 +16,18 @@ top_transactions_logger = logging.getLogger("top_transactions")
 
 
 def greeting() -> str:
-    """ возвращает приветствие, в зависимости от времени"""
+    """возвращает приветствие, в зависимости от времени"""
 
     time = datetime.datetime.now().hour
     greeting_logger.info("функция отработала")
     if time in range(0, 7):
-        return f"Доброй ночи"
+        return "Доброй ночи"
     elif time in range(6, 13):
-        return f"Доброе утро"
+        return "Доброе утро"
     if time in range(12, 19):
-        return f"Добрый день"
+        return "Добрый день"
     else:
-        return f"Добрый вечер"
+        return "Добрый вечер"
 
 
 def get_info_cards(operations_xlsx: pd.DataFrame) -> list[dict]:
@@ -46,4 +47,3 @@ def top_transactions(operations_xlsx: pd.DataFrame) -> list[dict]:
     top_transactions_logger.info("Функция отработала")
 
     return information.to_dict(orient="records")
-

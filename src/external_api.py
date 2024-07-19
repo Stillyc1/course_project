@@ -1,9 +1,9 @@
-import requests
-from dotenv import load_dotenv
-import os
 import json
 import logging
+import os
 
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
@@ -11,16 +11,17 @@ API_KEY_CURRENCY = os.getenv("API_KEY_CURRENCY")
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s = - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s = - %(name)s - %(levelname)s - %(message)s",
     filename="../log/external_api.txt",
-    filemode="w")
+    filemode="w",
+)
 
 open_logger = logging.getLogger("open_file")
 get_currnecy_logger = logging.getLogger("get_currency_rates")
 get_stock_logger = logging.getLogger("get_stock_prices")
 
 try:
-    with open("../user_settings.json", encoding="utf-8")as f:
+    with open("../user_settings.json", encoding="utf-8") as f:
         # открывает пользовательские настройки по акциям и валютам
         load_json_info = json.load(f)
         open_logger.info("Файл открыт для чтения")
@@ -68,8 +69,7 @@ def get_stock_prices(stocks: list) -> list[dict]:
                 "type": "stock",
                 "symbol": f"{stock}",
                 "outputsize": 1,
-                "timezone": "Europe/Moscow"
-
+                "timezone": "Europe/Moscow",
             }
 
             response = requests.get("https://api.twelvedata.com/time_series", params=params)

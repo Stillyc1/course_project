@@ -1,16 +1,18 @@
-from utils import greeting, get_info_cards, top_transactions
-from external_api import get_currency_rates, get_stock_prices
-import json
 import datetime
-import pandas as pd
+import json
 import logging
 
+import pandas as pd
+
+from external_api import get_currency_rates, get_stock_prices
+from utils import get_info_cards, greeting, top_transactions
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s = - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s = - %(name)s - %(levelname)s - %(message)s",
     filename="../log/views.txt",
-    filemode="w")
+    filemode="w",
+)
 
 opening_logger = logging.getLogger("opening_file")
 views_logger = logging.getLogger("views")
