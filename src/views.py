@@ -1,8 +1,14 @@
-from utils import greeting, opening_file, get_info_cards, top_transactions
+from utils import greeting, get_info_cards, top_transactions
 from external_api import get_currency_rates, get_stock_prices
 import json
 import datetime
 import pandas as pd
+
+
+def opening_file(path_file: str) -> pd.DataFrame:
+    """Функция читает файл формата xlsx и возвращает DataFrame"""
+    operations_xlsx = pd.read_excel(path_file)
+    return operations_xlsx
 
 
 def views(data: str) -> str:
@@ -32,8 +38,8 @@ def views(data: str) -> str:
     return json.dumps(informations_user, ensure_ascii=False, indent=4)
 
 
-if __name__ == "__main__":
-    print(views("22.12.2021"))
+# if __name__ == "__main__":
+#     print(views("22.12.2021"))
 
 # date_obj = datetime.datetime.strptime("10.12.2021", "%d.%m.%Y")
 # new_date_obj = date_obj.replace(day=1)

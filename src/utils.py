@@ -1,11 +1,6 @@
 import datetime
 import pandas as pd
-
-
-def opening_file(path_file: str) -> pd.DataFrame:
-    """Функция читает файл формата xlsx и возвращает DataFrame"""
-    operations_xlsx = pd.read_excel(path_file)
-    return operations_xlsx
+# from views import opening_file
 
 
 def greeting() -> str:
@@ -39,8 +34,8 @@ def top_transactions(operations_xlsx: pd.DataFrame) -> list[dict]:
     return information.to_dict(orient="records")
 
 
-if __name__ == "__main__":
-    file = opening_file("../data/test.xlsx")
-    x = opening_file("../data/operations.xlsx")
+# if __name__ == "__main__":
+    # file = opening_file("../data/test.xlsx")
+    # x = opening_file("../data/operations.xlsx")
     # print(get_info_cards(x))
     # print(top_transactions(x))
