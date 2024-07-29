@@ -47,3 +47,4 @@ def top_transactions(operations_xlsx: pd.DataFrame) -> list[dict]:
     top_transactions_logger.info("Функция отработала")
 
     return information.to_dict(orient="records")
+
